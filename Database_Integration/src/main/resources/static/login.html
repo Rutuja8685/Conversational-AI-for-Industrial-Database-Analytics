@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial AI - Sign In</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border border-gray-100 flex flex-col gap-5">
+        <div class="text-center space-y-2">
+            <div class="w-14 h-14 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-sm">
+                <i class="fa-solid fa-industry"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 tracking-tight">ConventionalAI Industrial DB</h2>
+            <p class="text-xs text-gray-400 font-medium">Please authorize your credentials to establish secure node connection</p>
+        </div>
+        
+        <div class="space-y-3.5">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Username Reference</label>
+                <input id="loginUser" type="text" value="rutuja_admin" class="w-full bg-gray-50 text-sm px-3 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Security Token Key</label>
+                <input id="loginPass" type="password" value="password123" class="w-full bg-gray-50 text-sm px-3 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+            </div>
+        </div>
+
+        <button onclick="processLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl shadow-md shadow-indigo-600/20 transition-all active:scale-[0.98] mt-2 flex items-center justify-center gap-2 text-sm">
+            <span>Authenticate Workspace</span>
+            <i class="fa-solid fa-right-to-bracket text-xs"></i>
+        </button>
+    </div>
+
+    <script>
+        function processLogin() {
+            const user = document.getElementById("loginUser").value.trim();
+            if (!user) {
+                alert("Please enter a username.");
+                return;
+            }
+            // Save valid session in user's browser data store
+            localStorage.setItem("authenticatedUser", user);
+            // Seamlessly forward page path over to dashboard
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
