@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversational AI Assistant - MySQL Database Interaction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Page Modal Overlay -->
+    <div id="loginModal" class="login-modal-overlay">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">⚡</div>
+                <h2>Conversational AI Assistant</h2>
+                <p>PS 05: Complex SQL Database Interaction & RBAC Guardrails</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="usernameInput">Username</label>
+                    <input type="text" id="usernameInput" placeholder="Enter username (e.g. sarah_admin)" required>
+                </div>
+                <div class="form-group">
+                    <label for="passwordInput">Password</label>
+                    <input type="password" id="passwordInput" placeholder="Enter password (e.g. admin123)" required>
+                </div>
+                <div id="loginError" class="login-error" style="display:none;"></div>
+                <button type="submit" class="login-submit-btn">Log In to Workspace</button>
+            </form>
+
+            <div class="quick-login-divider">
+                <span>OR 1-CLICK DEMO LOGIN</span>
+            </div>
+
+            <div class="quick-login-grid">
+                <button type="button" class="quick-login-btn admin" data-user="sarah_admin" data-pass="admin123">
+                    <span class="role-icon">👑</span>
+                    <div>
+                        <strong>Sarah Jenkins</strong>
+                        <span class="badge-sub">ADMIN (Full Query & Write Approval)</span>
+                    </div>
+                </button>
+                <button type="button" class="quick-login-btn engineer" data-user="alex_engineer" data-pass="engineer123">
+                    <span class="role-icon">🔧</span>
+                    <div>
+                        <strong>Alex Rivera</strong>
+                        <span class="badge-sub">ENGINEER (Query Access, Blocked Write Approval)</span>
+                    </div>
+                </button>
+                <button type="button" class="quick-login-btn viewer" data-user="sam_viewer" data-pass="viewer123">
+                    <span class="role-icon">👁️</span>
+                    <div>
+                        <strong>Sam Taylor</strong>
+                        <span class="badge-sub">VIEWER (Read-Only Access)</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Top Navigation Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-icon">⚡</div>
+                <div>
+                    <h1>Conversational AI SQL Assistant</h1>
+                    <span class="subtitle">MySQL Database • Safe NL to SQL Engine • RBAC Safety Guardrails</span>
+                </div>
+            </div>
+
+            <div class="header-controls">
+                <div class="active-user-info">
+                    <span id="activeUserName" class="user-name">Not Logged In</span>
+                    <span id="roleBadge" class="role-badge role-admin">ADMIN</span>
+                </div>
+                <button id="logoutBtn" class="logout-btn">Logout 🚪</button>
+            </div>
+        </header>
+
+        <!-- Clean 2-Column Dashboard Layout -->
+        <div class="main-layout">
+            <!-- Left Sidebar: Overview Cards, Recommended Queries & Chat History -->
+            <aside class="sidebar">
+                <!-- 1. Database Overview Stat Cards -->
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        <span>📊 MySQL Database Overview</span>
+                        <button id="refreshOverviewBtn" class="icon-btn" title="Refresh Live Counts">🔄</button>
+                    </div>
+                    <div id="overviewGrid" class="overview-grid">
+                        <div class="stat-card">
+                            <span class="stat-label">Tables</span>
+                            <span id="statTables" class="stat-value">-</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Sensors</span>
+                            <span id="statSensors" class="stat-value">-</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Maint. Logs</span>
+                            <span id="statLogs" class="stat-value">-</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Departments</span>
+                            <span id="statDepts" class="stat-value">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Recommended Queries / Contextual Prompts -->
+                <div class="sidebar-section">
+                    <div class="section-title">
+                        <span>💡 Recommended Prompts</span>
+                    </div>
+                    <div id="suggestionList" class="suggestion-list">
+                        <div class="loading-spinner">Loading prompt chips...</div>
+                    </div>
+                </div>
+
+                <!-- 3. Scrollable Chat History List -->
+                <div class="sidebar-section flex-expand">
+                    <div class="section-title">
+                        <span>📜 Chat History</span>
+                        <button id="clearHistoryBtn" class="icon-btn danger" title="Clear Chat History">🗑️</button>
+                    </div>
+                    <div id="chatHistoryList" class="chat-history-list">
+                        <p class="empty-history-text">No previous conversations yet.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Area: Dedicated Full-Height Conversational Console -->
+            <main class="workspace">
+                <div class="chat-console-wrapper">
+                    <!-- Dismissible Tip Banner -->
+                    <div id="welcomeBanner" class="welcome-banner">
+                        <div class="banner-content">
+                            <span>💡 <strong>Conversational Assistant Active:</strong> Ask questions in plain English (e.g., <em>"how many data you have"</em> or <em>"Show all offline sensors"</em>).</span>
+                        </div>
+                        <button id="dismissBannerBtn" class="dismiss-banner-btn" title="Dismiss Info Banner">✕</button>
+                    </div>
+
+                    <!-- Scrollable Conversational Feed -->
+                    <div id="chatFeed" class="chat-feed">
+                        <!-- Query response cards rendered dynamically -->
+                    </div>
+
+                    <!-- Fixed Bottom Input Panel -->
+                    <div class="fixed-bottom-input-panel">
+                        <form id="queryForm" class="query-form">
+                            <div class="textarea-wrapper">
+                                <textarea id="promptInput" placeholder="Ask a question in plain English (e.g., 'how many data you have' or 'Update status of sensor TEMP-101 to MAINTENANCE')..." rows="2" required></textarea>
+                                <div class="input-actions">
+                                    <button type="button" id="clearPromptBtn" class="secondary-btn">Clear</button>
+                                    <button type="submit" id="sendBtn" class="primary-btn">
+                                        <span>Run NL Query</span> 🚀
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
