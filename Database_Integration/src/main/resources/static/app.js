@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 // 🔐 AUTOMATED ROUTING GATE KEEPER
 (function verifyActiveSession() {
     const activeSessionUser = localStorage.getItem("authenticatedUser");
@@ -299,7 +299,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const user = getActiveUsername();
     loadUserChatHistory(user);
 });
-=======
 document.addEventListener('DOMContentLoaded', () => {
     // UI Elements
     const loginModal = document.getElementById('loginModal');
@@ -860,4 +859,4 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 });
->>>>>>> c53c816beb0269b25f2cde238dfd99efefe0017a
+

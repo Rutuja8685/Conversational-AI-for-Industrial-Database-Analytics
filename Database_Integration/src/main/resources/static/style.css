@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 Custom Dashboard Component Stylesheet
 
-@keyframes fadeIn { 
+/* @keyframes fadeIn { 
     from { 
         opacity: 0; 
         transform: translateY(5px); 
@@ -10,7 +10,7 @@ Custom Dashboard Component Stylesheet
         opacity: 1; 
         transform: translateY(0); 
     } 
-}
+} */
 
 .animate-fade-in { 
     animation: fadeIn 0.2s ease-out forwards; 
@@ -34,7 +34,7 @@ Custom Dashboard Component Stylesheet
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(156, 163, 175, 0.5);
 }
-=======
+
 :root {
     --bg-dark: #0f172a;
     --bg-card: #1e293b;
@@ -855,4 +855,4 @@ textarea:focus { border-color: var(--primary); }
     cursor: pointer;
 }
 .secondary-btn:hover { background: var(--bg-card-hover); }
->>>>>>> c53c816beb0269b25f2cde238dfd99efefe0017a
+
