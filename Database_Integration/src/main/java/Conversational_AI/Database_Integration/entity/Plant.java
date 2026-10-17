@@ -2,6 +2,8 @@ package Conversational_AI.Database_Integration.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -16,8 +18,9 @@ import lombok.NoArgsConstructor;
 public class Plant {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plant_id")
-    private String plantId;
+    private Long plantId; // Changed from String to Long to match INT foreign key constraints
 
     @Column(name = "plant_name", nullable = false)
     private String plantName;

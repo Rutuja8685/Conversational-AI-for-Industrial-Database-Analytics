@@ -18,11 +18,22 @@ public class DatabaseExecutorService {
         if (sqlQuery == null) {
             throw new IllegalArgumentException("Query cannot be null");
         }
+        
+        // 1. Strip markdown tags, code blocks, and semicolons
         String cleanQuery = sqlQuery.replaceAll("(?i)```sql", "")
                                     .replaceAll("```", "")
                                     .replace(";", "")
                                     .trim();
-        return cleanQuery.replaceAll("^[^a-zA-Z]+", "");
+        
+        cleanQuery = cleanQuery.replaceAll("^[^a-zA-Z]+", "");
+
+        // 2. Fix table name mismatches (Convert plural generated tables to singular schema tables)
+        cleanQuery = cleanQuery.replaceAll("(?i)\\bsensors\\b", "sensor")
+                               .replaceAll("(?i)\\bplants\\b", "plant")
+                               .replaceAll("(?i)\\bdepartments\\b", "department")
+                               .replaceAll("(?i)\\bproductionlines\\b", "productionline");
+
+        return cleanQuery;
     }
 
     public List<Map<String, Object>> executeSelectQuery(String sqlQuery) {
